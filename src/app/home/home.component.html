@@ -1,12 +1,17 @@
 <div class="courses-panel">
 
-  <h3>All Courses {{values().join(',')}}</h3>
+  <h3>10x: {{tenCounter()}}</h3>
+  <h3>100x: {{hundredCounter()}}</h3>
 
   <button class="btn">
     Add Course
   </button>
-  <button class="btn" (click)="rightWayToAppendNewValue()">
+  <button class="btn" (click)="increment()">
     Increment
+  </button>
+
+  <button class="btn" (click)="decrement()">
+    Decrement
   </button>
 
   <mat-tab-group>

@@ -33,24 +33,25 @@ type Counter = {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  public values = signal<number[]>([0]);
+  public counter = signal(0);
 
-  /**
-   * wrong way to append new value using signals
-   */
-  wrongWayToAppendNewValue() {
-    const values = this.values();
-    const lastItem = values[values.length - 1];
-    values.push(lastItem + 1);
+  tenCounter = computed(() => {
+    const val = this.counter();
+    return val * 10;
+  });
+
+  hundredCounter = computed(() => {
+    const val = this.counter();
+    return val * 100;
+  });
+
+  public increment() {
+    this.counter.update((val) => val + 1);
   }
-
-  /**
-   * right way to append new value using signals
-   */
-  rightWayToAppendNewValue() {
-    this.values.update(values=>([
-      ...values,
-      values[values.length - 1]+1
-    ]))
+  public decrement() {
+    const currentCounter = this.counter();
+    if (currentCounter > 0) {
+      this.counter.update((val) => val - 1);
+    }
   }
 }
