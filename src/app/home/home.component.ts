@@ -32,6 +32,6 @@ export class HomeComponent {
   public counter: WritableSignal<number> = signal(0);
 
   public increment() {
-    this.counter.set(this.counter() + 1);
+    this.counter.update((counter) => counter + 1);
   }
 }
