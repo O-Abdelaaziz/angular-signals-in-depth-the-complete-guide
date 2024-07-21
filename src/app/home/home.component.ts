@@ -21,6 +21,10 @@ import {
   outputFromObservable,
 } from '@angular/core/rxjs-interop';
 
+type Counter = {
+  value: number;
+};
+
 @Component({
   selector: 'home',
   standalone: true,
@@ -29,9 +33,19 @@ import {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  public counter: WritableSignal<number> = signal(0);
+  public counter = signal<Counter>({
+    value: 1000,
+  });
 
   public increment() {
-    this.counter.update((counter) => counter + 1);
+    // this.counter.update((counter) => counter + 1);
+    //! this incorrect , you should not mutate directly the value of signal,
+    // this.counter().value++;
+    //* instead we should provide a complete new value
+
+    this.counter.update((counter) => ({
+      ...counter,
+      value: counter.value + 1,
+    }));
   }
 }
