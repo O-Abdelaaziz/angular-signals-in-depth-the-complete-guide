@@ -33,19 +33,24 @@ type Counter = {
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  public counter = signal<Counter>({
-    value: 1000,
-  });
+  public values = signal<number[]>([0]);
 
-  public increment() {
-    // this.counter.update((counter) => counter + 1);
-    //! this incorrect , you should not mutate directly the value of signal,
-    // this.counter().value++;
-    //* instead we should provide a complete new value
+  /**
+   * wrong way to append new value using signals
+   */
+  wrongWayToAppendNewValue() {
+    const values = this.values();
+    const lastItem = values[values.length - 1];
+    values.push(lastItem + 1);
+  }
 
-    this.counter.update((counter) => ({
-      ...counter,
-      value: counter.value + 1,
-    }));
+  /**
+   * right way to append new value using signals
+   */
+  rightWayToAppendNewValue() {
+    this.values.update(values=>([
+      ...values,
+      values[values.length - 1]+1
+    ]))
   }
 }
