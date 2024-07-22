@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   effect,
+  EffectRef,
   inject,
   Injector,
   signal,
@@ -35,6 +36,7 @@ type Counter = {
 })
 export class HomeComponent {
   public counter = signal(0);
+  public effectRef: EffectRef | null = null;
 
   tenCounter = computed(() => {
     const val = this.counter();
@@ -47,19 +49,21 @@ export class HomeComponent {
   });
 
   constructor() {
-    afterNextRender(() => {
-      effect(
-        () => {
-          console.log(`counter value 1: ${this.counter()}`);
-          //this.increment(); do this in very specific edge cases, because it create a loop that crash the whole app
-        },
-        {
-          allowSignalWrites: false,
-        }
-      );
-    });
+    this.effectRef = effect((onCleanup) => {
+      /**
+       * You need to create the dependency of effect before anything else
+       * So att the beginning of the effect, create all your dependencies and then use them in the body of effect
+       */
+      const counter = this.counter();
+      const timeout = setTimeout(() => {
+        console.log(`counter value 1: ${counter}`);
+      }, 1000);
 
-    console.log(`counter value 2: ${this.counter()}`);
+      onCleanup(() => {
+        console.log('Calling clean up function');
+        clearTimeout(timeout);
+      });
+    });
   }
 
   public increment() {
@@ -70,5 +74,9 @@ export class HomeComponent {
     if (currentCounter > 0) {
       this.counter.update((val) => val - 1);
     }
+  }
+
+  public cleanup() {
+    this.effectRef?.destroy();
   }
 }
