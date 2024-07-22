@@ -30,7 +30,7 @@ export class CoursesService {
   }
 
   async updateCourse(
-    courseId: number,
+    courseId: string,
     course: Partial<Course>
   ): Promise<Course> {
     const course$ = this.httpClient.put<Course>(
@@ -41,7 +41,7 @@ export class CoursesService {
     return response;
   }
 
-  async deleteCourse(courseId: number): Promise<Course> {
+  async deleteCourse(courseId: string): Promise<Course> {
     const course$ = this.httpClient.delete<Course>(
       `${this.env.apiRoot}/courses/${courseId}`
     );
