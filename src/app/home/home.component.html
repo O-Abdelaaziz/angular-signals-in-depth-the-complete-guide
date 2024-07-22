@@ -8,11 +8,11 @@
   <mat-tab-group>
 
     <mat-tab label="Beginners">
-      <courses-card-list [courses]="beginnerCourses()" (updatedCourse)="onCourseUpdated($event)"></courses-card-list>
+      <courses-card-list [courses]="beginnerCourses()" (updatedCourse)="onCourseUpdated($event)" (deletedCourse)="onCourseDeleted($event)"></courses-card-list>
     </mat-tab>
 
     <mat-tab label="Advanced">
-      <courses-card-list [courses]="advancedCourses()" (updatedCourse)="onCourseUpdated($event)"></courses-card-list>
+      <courses-card-list [courses]="advancedCourses()" (updatedCourse)="onCourseUpdated($event)" (deletedCourse)="onCourseDeleted($event)"></courses-card-list>
     </mat-tab>
 
   </mat-tab-group>

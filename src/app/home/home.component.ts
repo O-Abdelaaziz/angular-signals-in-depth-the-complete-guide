@@ -74,4 +74,16 @@ export class HomeComponent implements OnInit {
     this.#courses.set(newCourses);
 
   }
+
+  public async onCourseDeleted(courseId:string){
+    try {
+       await this.coursesService.deleteCourse(courseId);
+       const courses=this.#courses();
+       const newCourses=courses.filter(course=> course.id !== courseId);
+       this.#courses.set(newCourses);
+    } catch (error) {
+      console.log("An Error occurred: " ,error);
+      
+    }
+  }
 }
