@@ -45,6 +45,16 @@ export class HomeComponent {
     return val * 100;
   });
 
+
+  constructor(){
+    effect(()=>{
+      console.log(`counter value 1: ${this.counter()}`);
+      
+    })
+
+    console.log(`counter value 2: ${this.counter()}`);
+  }
+
   public increment() {
     this.counter.update((val) => val + 1);
   }
