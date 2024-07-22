@@ -13,6 +13,7 @@ import { openEditCourseDialog } from '../edit-course-dialog/edit-course-dialog.c
 })
 export class CoursesCardListComponent {
   public courses = input.required<Course[]>();
+  public updatedCourse = output<Course>();
 
   private dialog = inject(MatDialog);
 
@@ -22,5 +23,6 @@ export class CoursesCardListComponent {
       title: 'Update Existing Course ' + course.title,
       course: course,
     });
+    this.updatedCourse.emit(newCourse);
   }
 }

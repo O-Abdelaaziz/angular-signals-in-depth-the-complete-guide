@@ -67,4 +67,11 @@ export class HomeComponent implements OnInit {
       console.log('Something went wrong: ', error);
     }
   }
+
+  public onCourseUpdated(updatedCourse:Course){
+    const courses=this.#courses();
+    const newCourses=courses.map(course=>(course.id==updatedCourse.id?updatedCourse:course));
+    this.#courses.set(newCourses);
+
+  }
 }
