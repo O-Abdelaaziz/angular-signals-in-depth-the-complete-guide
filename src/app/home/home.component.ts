@@ -36,8 +36,6 @@ type Counter = {
 export class HomeComponent {
   public counter = signal(0);
 
-  injector = inject(Injector);
-
   tenCounter = computed(() => {
     const val = this.counter();
     return val * 10;
@@ -53,9 +51,10 @@ export class HomeComponent {
       effect(
         () => {
           console.log(`counter value 1: ${this.counter()}`);
+          //this.increment(); do this in very specific edge cases, because it create a loop that crash the whole app
         },
         {
-          injector: this.injector,
+          allowSignalWrites: false,
         }
       );
     });
