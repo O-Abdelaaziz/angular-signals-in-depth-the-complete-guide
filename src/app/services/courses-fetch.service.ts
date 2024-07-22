@@ -8,16 +8,43 @@ import { Course } from '../models/course.model';
 export class CoursesServiceWithFetch {
   env = environment;
 
-  async loadAllCourses(): Promise<Course[]> {
+  public async loadAllCourses(): Promise<Course[]> {
     const response = await fetch(`${this.env.apiRoot}/courses`);
     const payload = await response.json();
     return payload.courses;
-    /**
-     * This is done automatically because the use of async/await flags which going to inspect the return type
-     * if it promise is going to use promise directly
-     * if it primitive type is going to wrap it into Promise.resolve(?)
-     */
-    //return Promise.resolve(payload.courses) 
-    //return payload.courses as Course[];     => But remove the definition form the method :Promise<Course[]>
+  }
+
+  public async createCourse(course: Partial<Course>): Promise<Course> {
+    const response = await fetch(`${this.env.apiRoot}/courses`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(course),
+    });
+
+    const payload = await response.json();
+    return payload;
+  }
+
+  public async updateCourse(
+    courseId: number,
+    changes: Partial<Course>
+  ): Promise<Course> {
+    const response = await fetch(`${this.env.apiRoot}/courses/${courseId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(changes),
+    });
+    const payload = await response.json();
+    return payload;
+  }
+
+  public async deleteCourse(courseId: number): Promise<void> {
+    const response = await fetch(`${this.env.apiRoot}/courses/${courseId}`, {
+      method: 'DELETE',
+    });
   }
 }
