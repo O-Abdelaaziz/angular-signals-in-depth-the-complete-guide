@@ -23,7 +23,7 @@ export class CoursesServiceWithFetch {
       body: JSON.stringify(course),
     });
 
-    const payload = await response.json();
+    const payload = response.json();
     return payload;
   }
 
@@ -38,12 +38,12 @@ export class CoursesServiceWithFetch {
       },
       body: JSON.stringify(changes),
     });
-    const payload = await response.json();
+    const payload = response.json();
     return payload;
   }
 
   public async deleteCourse(courseId: number): Promise<void> {
-    const response = await fetch(`${this.env.apiRoot}/courses/${courseId}`, {
+    await fetch(`${this.env.apiRoot}/courses/${courseId}`, {
       method: 'DELETE',
     });
   }
