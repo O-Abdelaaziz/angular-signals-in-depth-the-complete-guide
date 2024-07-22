@@ -32,7 +32,7 @@ import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   public courses = signal<Course[]>([]);
 
   private coursesService = inject(CoursesServiceWithFetch);
@@ -44,9 +44,15 @@ export class HomeComponent implements OnInit {
   //     .catch((error) => console.log('Something went wrong: ', error));
   // }
 
-  ngOnInit(): void {
-    this.loadCourses();
+  constructor(){
+    afterNextRender(()=>{
+      this.loadCourses();
+    })
   }
+
+  // ngOnInit(): void {
+  //   this.loadCourses();
+  // }
 
   public async loadCourses() {
     try {
