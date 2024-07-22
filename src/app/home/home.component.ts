@@ -32,27 +32,14 @@ import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   public courses = signal<Course[]>([]);
 
-  private coursesService = inject(CoursesServiceWithFetch);
+  private coursesService = inject(CoursesService);
 
-  // public async loadCourses() {
-  //   await this.coursesService
-  //     .loadAllCourses()
-  //     .then((courses) => this.courses.set(courses))
-  //     .catch((error) => console.log('Something went wrong: ', error));
-  // }
-
-  constructor(){
-    afterNextRender(()=>{
-      this.loadCourses();
-    })
+  ngOnInit(): void {
+    this.loadCourses();
   }
-
-  // ngOnInit(): void {
-  //   this.loadCourses();
-  // }
 
   public async loadCourses() {
     try {
