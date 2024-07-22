@@ -6,6 +6,7 @@ import {
   EffectRef,
   inject,
   Injector,
+  OnInit,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -22,6 +23,7 @@ import {
   outputToObservable,
   outputFromObservable,
 } from '@angular/core/rxjs-interop';
+import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
 
 @Component({
   selector: 'home',
@@ -30,8 +32,29 @@ import {
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   public courses = signal<Course[]>([]);
 
-  private coursesService = inject(CoursesService);
+  private coursesService = inject(CoursesServiceWithFetch);
+
+  // public async loadCourses() {
+  //   await this.coursesService
+  //     .loadAllCourses()
+  //     .then((courses) => this.courses.set(courses))
+  //     .catch((error) => console.log('Something went wrong: ', error));
+  // }
+
+  ngOnInit(): void {
+    this.loadCourses();
+  }
+
+  public async loadCourses() {
+    try {
+      const courses = await this.coursesService.loadAllCourses();
+      this.courses.set(courses);
+      console.log('Courses Counts:', courses.length);
+    } catch (error) {
+      console.log('Something went wrong: ', error);
+    }
+  }
 }
