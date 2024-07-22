@@ -33,9 +33,26 @@ import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  public courses = signal<Course[]>([]);
+  #courses = signal<Course[]>([]);
+
+  public beginnerCourses = computed(() => {
+    const courses = this.#courses();
+    return courses.filter((course) => course.category == 'BEGINNER');
+  });
+
+  public advancedCourses = computed(() => {
+    const courses = this.#courses();
+    return courses.filter((course) => course.category == 'ADVANCED');
+  });
 
   private coursesService = inject(CoursesService);
+
+  constructor() {
+    effect(() => {
+      console.log('Beginner Courses: ', this.beginnerCourses().length);
+      console.log('Advanced Courses: ', this.advancedCourses().length);
+    });
+  }
 
   ngOnInit(): void {
     this.loadCourses();
@@ -44,7 +61,7 @@ export class HomeComponent implements OnInit {
   public async loadCourses() {
     try {
       const courses = await this.coursesService.loadAllCourses();
-      this.courses.set(courses);
+      this.#courses.set(courses);
       console.log('Courses Counts:', courses.length);
     } catch (error) {
       console.log('Something went wrong: ', error);
