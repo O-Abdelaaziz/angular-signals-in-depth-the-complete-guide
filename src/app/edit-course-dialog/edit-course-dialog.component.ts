@@ -27,6 +27,23 @@ import { firstValueFrom } from 'rxjs';
 })
 export class EditCourseDialogComponent {
   private matDialogRef = inject(MatDialogRef);
+  public data: EditCourseDialogData = inject(MAT_DIALOG_DATA);
+  formBuilder = inject(FormBuilder);
+  form = this.formBuilder.group({
+    title: [''],
+    longDescription: [''],
+    category: [''],
+    iconUrl: [''],
+  });
+
+  constructor() {
+    this.form.patchValue({
+      title: this.data?.course?.title,
+      longDescription: this.data?.course?.longDescription,
+      category: this.data?.course?.category,
+      iconUrl: this.data?.course?.iconUrl,
+    });
+  }
 
   public onClose() {
     this.matDialogRef.close();
