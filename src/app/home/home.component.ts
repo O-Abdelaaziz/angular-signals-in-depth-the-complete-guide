@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   Component,
   computed,
   effect,
@@ -35,6 +36,8 @@ type Counter = {
 export class HomeComponent {
   public counter = signal(0);
 
+  injector = inject(Injector);
+
   tenCounter = computed(() => {
     const val = this.counter();
     return val * 10;
@@ -45,12 +48,17 @@ export class HomeComponent {
     return val * 100;
   });
 
-
-  constructor(){
-    effect(()=>{
-      console.log(`counter value 1: ${this.counter()}`);
-      
-    })
+  constructor() {
+    afterNextRender(() => {
+      effect(
+        () => {
+          console.log(`counter value 1: ${this.counter()}`);
+        },
+        {
+          injector: this.injector,
+        }
+      );
+    });
 
     console.log(`counter value 2: ${this.counter()}`);
   }
