@@ -12,17 +12,21 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './course.component.html',
   styleUrl: './course.component.scss',
 })
-export class CourseComponent implements OnInit{
+export class CourseComponent implements OnInit {
   course = signal<Course | null>(null);
 
   lessons = signal<Lesson[]>([]);
 
-  route=inject(ActivatedRoute);
+  route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     const course = this.route.snapshot.data['course'];
     if (course) {
       this.course.set(course);
+    }
+    const lessons = this.route.snapshot.data['lessons'];
+    if (lessons) {
+      this.lessons.set(lessons);
     }
     // const courseId = this.route.snapshot.paramMap.get('courseId');
     // if (courseId) {

@@ -8,12 +8,13 @@
     </div>
     <div class="table-container">
         <table class="results-table">
+
+            @for(lesson of lessons(); track lesson.id){
             <tr>
-                @for(lesson of lessons(); track lesson.id){
                 <td>{{lesson.description}}</td>
                 <td>{{lesson.duration}}</td>
-                }
             </tr>
+            }
         </table>
     </div>
 </div>

@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { LessonsComponent } from './lessons/lessons.component';
 import { isUserAuthenticatedGuard } from './guards/is-user-authenticated.guard';
 import { CourseComponent } from './course/course.component';
+import { courseLessonResolver } from './course/course.lesson.resolver';
 
 export const routes: Routes = [
   {
@@ -17,7 +18,8 @@ export const routes: Routes = [
     component: CourseComponent,
     canActivate: [isUserAuthenticatedGuard],
     resolve: {
-      course: courseResolver
+      course: courseResolver,
+      lessons: courseLessonResolver
     }
   },
   {
@@ -27,7 +29,7 @@ export const routes: Routes = [
   {
     path: 'lessons',
     component: LessonsComponent,
-    canActivate: [isUserAuthenticatedGuard],
+    canActivate: [isUserAuthenticatedGuard]
   },
   {
     path: '**',
