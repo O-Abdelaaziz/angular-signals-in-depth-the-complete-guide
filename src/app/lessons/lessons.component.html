@@ -3,8 +3,8 @@
     <div class="header">
         <h1>Search Lessons</h1>
         <div class="from-control search-controls">
-            <input type="text" placeholder="Search lessons" #search (keyup.enter)="onSearch(search.value)">
-            <button class="btn" (click)="onSearch(search.value)">Search</button>
+            <input type="text" placeholder="Search lessons" #search (keyup.enter)="onSearch()">
+            <button class="btn" (click)="onSearch()">Search</button>
         </div>
     </div>
     @if(lessons().length>0) {
