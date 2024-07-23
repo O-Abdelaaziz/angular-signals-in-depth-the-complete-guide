@@ -24,6 +24,7 @@ import {
   outputFromObservable,
 } from '@angular/core/rxjs-interop';
 import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
+import { openEditCourseDialog } from '../edit-course-dialog/edit-course-dialog.component';
 
 @Component({
   selector: 'home',
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit {
   });
 
   private coursesService = inject(CoursesService);
+  private matDialog = inject(MatDialog);
 
   constructor() {
     effect(() => {
@@ -68,22 +70,31 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public onCourseUpdated(updatedCourse:Course){
-    const courses=this.#courses();
-    const newCourses=courses.map(course=>(course.id==updatedCourse.id?updatedCourse:course));
+  public onCourseUpdated(updatedCourse: Course) {
+    const courses = this.#courses();
+    const newCourses = courses.map((course) =>
+      course.id == updatedCourse.id ? updatedCourse : course
+    );
     this.#courses.set(newCourses);
-
   }
 
-  public async onCourseDeleted(courseId:string){
+  public async onCourseDeleted(courseId: string) {
     try {
-       await this.coursesService.deleteCourse(courseId);
-       const courses=this.#courses();
-       const newCourses=courses.filter(course=> course.id !== courseId);
-       this.#courses.set(newCourses);
+      await this.coursesService.deleteCourse(courseId);
+      const courses = this.#courses();
+      const newCourses = courses.filter((course) => course.id !== courseId);
+      this.#courses.set(newCourses);
     } catch (error) {
-      console.log("An Error occurred: " ,error);
-      
+      console.log('An Error occurred: ', error);
     }
+  }
+  public async onAddCourse() {
+    const newCourse = await openEditCourseDialog(this.matDialog, {
+      mode: 'create',
+      title: 'Create new course',
+    });
+
+    const newCourses = [...this.#courses(), newCourse];
+    this.#courses.set(newCourses);
   }
 }
