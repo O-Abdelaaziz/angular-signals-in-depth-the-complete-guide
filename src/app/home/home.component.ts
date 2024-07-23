@@ -1,3 +1,4 @@
+import { LoadingService } from './../loading/loading.service';
 import {
   afterNextRender,
   Component,
@@ -25,11 +26,12 @@ import {
 } from '@angular/core/rxjs-interop';
 import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
 import { openEditCourseDialog } from '../edit-course-dialog/edit-course-dialog.component';
+import { LoadingIndicatorComponent } from "../loading/loading.component";
 
 @Component({
   selector: 'home',
   standalone: true,
-  imports: [MatTabGroup, MatTab, CoursesCardListComponent],
+  imports: [MatTabGroup, MatTab, CoursesCardListComponent, LoadingIndicatorComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -47,6 +49,7 @@ export class HomeComponent implements OnInit {
   });
 
   private coursesService = inject(CoursesService);
+  private loadingService = inject(LoadingService);
   private matDialog = inject(MatDialog);
 
   constructor() {
@@ -62,11 +65,14 @@ export class HomeComponent implements OnInit {
 
   public async loadCourses() {
     try {
+      this.loadingService.loadingOn()
       const courses = await this.coursesService.loadAllCourses();
       this.#courses.set(courses.sort(sortCoursesBySeqNo));
       console.log('Courses Counts:', courses.length);
     } catch (error) {
       console.log('Something went wrong: ', error);
+    } finally{
+      this.loadingService.loadingOff()
     }
   }
 
@@ -80,12 +86,15 @@ export class HomeComponent implements OnInit {
 
   public async onCourseDeleted(courseId: string) {
     try {
+      this.loadingService.loadingOn()
       await this.coursesService.deleteCourse(courseId);
       const courses = this.#courses();
       const newCourses = courses.filter((course) => course.id !== courseId);
       this.#courses.set(newCourses);
     } catch (error) {
       console.log('An Error occurred: ', error);
+    }finally{
+      this.loadingService.loadingOff()
     }
   }
   public async onAddCourse() {
