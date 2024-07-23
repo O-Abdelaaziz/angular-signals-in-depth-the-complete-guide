@@ -32,9 +32,10 @@ export class EditCourseDialogComponent {
   form = this.formBuilder.group({
     title: [''],
     longDescription: [''],
-    category: [''],
     iconUrl: [''],
   });
+
+  category = signal<CourseCategory>('BEGINNER');
 
   private coursesService = inject(CoursesService);
 
@@ -42,9 +43,10 @@ export class EditCourseDialogComponent {
     this.form.patchValue({
       title: this.data?.course?.title,
       longDescription: this.data?.course?.longDescription,
-      category: this.data?.course?.category,
       iconUrl: this.data?.course?.iconUrl,
     });
+
+    this.category.set(this.data?.course!.category);
   }
 
   public onClose() {
@@ -53,19 +55,17 @@ export class EditCourseDialogComponent {
 
   public async onSave() {
     const courseProps = this.form.value as Partial<Course>;
+    courseProps.category=this.category();
     if (this.data?.mode == 'update') {
       this.updateCourse(this.data?.course!.id, courseProps);
-    }else if (this.data?.mode == 'create'){
+    } else if (this.data?.mode == 'create') {
       this.createCourse(courseProps);
     }
   }
 
-
   async createCourse(course: Partial<Course>) {
     try {
-      const newCourse = await this.coursesService.createCourse(
-        course
-      );
+      const newCourse = await this.coursesService.createCourse(course);
       this.matDialogRef.close(newCourse);
     } catch (error) {
       console.error('An Error occurred: ', error);
