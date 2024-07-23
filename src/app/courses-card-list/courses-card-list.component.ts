@@ -24,10 +24,14 @@ export class CoursesCardListComponent {
       title: 'Update Existing Course ' + course.title,
       course: course,
     });
+
+    if (!newCourse) {
+      return;
+    }
     this.updatedCourse.emit(newCourse);
   }
 
-  public onCourseDeleted(course:Course){
-      this.deletedCourse.emit(course.id);
+  public onCourseDeleted(course: Course) {
+    this.deletedCourse.emit(course.id);
   }
 }

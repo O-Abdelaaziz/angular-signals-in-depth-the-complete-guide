@@ -46,7 +46,7 @@ export class EditCourseDialogComponent {
       iconUrl: this.data?.course?.iconUrl,
     });
 
-    this.category.set(this.data?.course!.category);
+    this.category.set(this.data?.course?.category ?? 'BEGINNER');
   }
 
   public onClose() {
@@ -55,7 +55,7 @@ export class EditCourseDialogComponent {
 
   public async onSave() {
     const courseProps = this.form.value as Partial<Course>;
-    courseProps.category=this.category();
+    courseProps.category = this.category();
     if (this.data?.mode == 'update') {
       this.updateCourse(this.data?.course!.id, courseProps);
     } else if (this.data?.mode == 'create') {
