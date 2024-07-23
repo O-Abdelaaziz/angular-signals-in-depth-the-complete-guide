@@ -14,13 +14,15 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 export class LoginComponent {
   private formBuilder = inject(FormBuilder);
   private messagesService = inject(MessagesService);
+  private authService=inject(AuthService);
+  private router = inject(Router);
 
   public loginFormGroup = this.formBuilder.group({
     email: [''],
     password: [''],
   });
 
-  public onLogin() {
+  public async onLogin() {
     try {
       const { email, password } = this.loginFormGroup.value;
       if (!email || !password) {
@@ -28,8 +30,12 @@ export class LoginComponent {
           'email or password is mandatory!',
           'warning'
         );
+        return;
       }
-      
+
+      await this.authService.login(email, password);
+      await this.router.navigate(['/home']);
+
     } catch (error) {
       this.messagesService.showMessage(
         'Login failed, please try again: ' + error,

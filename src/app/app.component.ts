@@ -34,4 +34,8 @@ export class AppComponent {
   public authService = inject(AuthService);
 
   public isLoggedIn = this.authService.isLoggedIn;
+
+  public onLogout(){
+    this.authService.logout();
+  }
 }

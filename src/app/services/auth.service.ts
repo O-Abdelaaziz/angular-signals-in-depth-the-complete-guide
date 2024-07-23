@@ -16,6 +16,7 @@ export class AuthService {
 
   public isLoggedIn = computed(() => !!this.user());
   private httpClient = inject(HttpClient);
+  private router = inject(Router);
 
   public async login(email: string, password: string): Promise<User> {
     const login$ = this.httpClient.post<User>(`${environment.apiRoot}/login`, {
@@ -26,5 +27,10 @@ export class AuthService {
     const user = await firstValueFrom(login$);
     this.#userSignal.set(user);
     return user;
+  }
+
+  public logout() {
+    this.#userSignal.set(null);
+    this.router.navigateByUrl('/login');
   }
 }
