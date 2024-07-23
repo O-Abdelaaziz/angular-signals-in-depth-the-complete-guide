@@ -1,4 +1,3 @@
-import { LoadingService } from './../loading/loading.service';
 import {
   afterNextRender,
   Component,
@@ -26,12 +25,17 @@ import {
 } from '@angular/core/rxjs-interop';
 import { CoursesServiceWithFetch } from '../services/courses-fetch.service';
 import { openEditCourseDialog } from '../edit-course-dialog/edit-course-dialog.component';
-import { LoadingIndicatorComponent } from "../loading/loading.component";
+import { LoadingIndicatorComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'home',
   standalone: true,
-  imports: [MatTabGroup, MatTab, CoursesCardListComponent, LoadingIndicatorComponent],
+  imports: [
+    MatTabGroup,
+    MatTab,
+    CoursesCardListComponent,
+    LoadingIndicatorComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -49,7 +53,7 @@ export class HomeComponent implements OnInit {
   });
 
   private coursesService = inject(CoursesService);
-  private loadingService = inject(LoadingService);
+  private messagesService = inject(MessagesService);
   private matDialog = inject(MatDialog);
 
   constructor() {
@@ -69,6 +73,10 @@ export class HomeComponent implements OnInit {
       this.#courses.set(courses.sort(sortCoursesBySeqNo));
       console.log('Courses Counts:', courses.length);
     } catch (error) {
+      this.messagesService.showMessage(
+        'Something went wrong: ' + error,
+        'error'
+      );
       console.log('Something went wrong: ', error);
     }
   }
