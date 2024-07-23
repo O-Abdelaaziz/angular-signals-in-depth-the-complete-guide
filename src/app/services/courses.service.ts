@@ -26,6 +26,14 @@ export class CoursesService {
     return response.courses;
   }
 
+  async loadCourseById(courseId: string): Promise<Course> {
+    const course$ = this.httpClient.get<Course>(
+      `${this.env.apiRoot}/courses/${courseId}`
+    );
+    const response = await firstValueFrom(course$);
+    return response;
+  }
+
   async createCourse(course: Partial<Course>): Promise<Course> {
     const course$ = this.httpClient.post<Course>(
       `${this.env.apiRoot}/courses`,
