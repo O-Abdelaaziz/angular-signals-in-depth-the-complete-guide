@@ -14,11 +14,11 @@ export const routes: Routes = [
   },
   {
     path: "courses/:courseId",
-    component: LoginComponent
+    component: CourseComponent
   },
   {
     path: "login",
-    component: CourseComponent 
+    component: LoginComponent 
   },
   {
     path: "lessons",
