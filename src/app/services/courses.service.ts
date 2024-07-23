@@ -13,12 +13,14 @@ export class CoursesService {
   private httpClient = inject(HttpClient);
   private env = environment;
 
+  // {
+  //   To Skip Loading
+  //   context: new HttpContext().set(SkipLoading, true),
+  // }
   async loadAllCourses(): Promise<Course[]> {
     const courses$ = this.httpClient.get<GetCoursesResponse>(
-      `${this.env.apiRoot}/courses`,
-      {
-        context: new HttpContext().set(SkipLoading, true),
-      }
+      `${this.env.apiRoot}/courses`
+   
     );
     const response = await firstValueFrom(courses$);
     return response.courses;
