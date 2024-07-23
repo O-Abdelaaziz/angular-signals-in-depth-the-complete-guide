@@ -65,14 +65,11 @@ export class HomeComponent implements OnInit {
 
   public async loadCourses() {
     try {
-      this.loadingService.loadingOn()
       const courses = await this.coursesService.loadAllCourses();
       this.#courses.set(courses.sort(sortCoursesBySeqNo));
       console.log('Courses Counts:', courses.length);
     } catch (error) {
       console.log('Something went wrong: ', error);
-    } finally{
-      this.loadingService.loadingOff()
     }
   }
 
@@ -86,15 +83,12 @@ export class HomeComponent implements OnInit {
 
   public async onCourseDeleted(courseId: string) {
     try {
-      this.loadingService.loadingOn()
       await this.coursesService.deleteCourse(courseId);
       const courses = this.#courses();
       const newCourses = courses.filter((course) => course.id !== courseId);
       this.#courses.set(newCourses);
     } catch (error) {
       console.log('An Error occurred: ', error);
-    }finally{
-      this.loadingService.loadingOff()
     }
   }
   public async onAddCourse() {
