@@ -21,20 +21,38 @@ export class LessonsComponent {
   lessons = signal<Lesson[] | []>([]);
   selectedLesson = signal<Lesson | null>(null);
 
-
   lessonsService = inject(LessonsService);
   searchInput = viewChild.required('search', { read: ElementRef });
 
-
-
-  public onSearch() {
+  public async onSearch() {
     const searchText = this.searchInput()?.nativeElement.value;
     console.log(searchText);
-    
-    this.lessonsService
-      .loadAllLessons({ query: searchText })
-      .then((lessons) => {
-        this.lessons.set(lessons);
-      });
+
+    // await this.lessonsService
+    //   .loadAllLessons({ query: searchText })
+    //   .then((lessons) => {
+    //     this.lessons.set(lessons);
+    //   });
+    const result = await this.lessonsService.loadAllLessons({
+      query: searchText,
+    });
+    this.lessons.set(result);
+  }
+
+  public onLessonSelected(lesson: Lesson) {
+    this.mode.set('detail');
+    this.selectedLesson.set(lesson);
+  }
+
+  public onLessonUpdated(incomingLesson: Lesson) {
+    this.lessons.update((lessons) =>
+      lessons.map((lesson) =>
+        lesson.id === incomingLesson.id ? incomingLesson : lesson
+      )
+    );
+  }
+
+  public onCancel() {
+    this.mode.set('master');
   }
 }

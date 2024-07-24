@@ -37,5 +37,15 @@ export class LessonsService {
     return response.lessons;
   }
 
-   
+  public async updateLesson(
+    lessonId: string,
+    lesson: Partial<Lesson>
+  ): Promise<Lesson> {
+    const lesson$ = this.http.put<Lesson>(
+      `${this.env.apiRoot}/lessons/${lessonId}`,
+      lesson
+    );
+    const response = await firstValueFrom(lesson$);
+    return response;
+  }
 }
