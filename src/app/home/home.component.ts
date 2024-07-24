@@ -140,19 +140,41 @@ export class HomeComponent implements OnInit {
     //   injector: this.injector
     // });
     // const number$ = interval(1000).pipe(startWith(0)); if you add requireSync equals true in toSignal config
-    const number$ = interval(1000);
-    const numbers = toSignal(number$, {
-      injector: this.injector,
-      initialValue: 0,
-    });
+    // const number$ = interval(1000);
+    // const numbers = toSignal(number$, {
+    //   injector: this.injector,
+    //   initialValue: 0,
+    // });
 
-    effect(
-      () => {
-        console.log('numbers:', numbers());
-      },
-      {
-        injector: this.injector,
-      }
-    );
+    // effect(
+    //   () => {
+    //     console.log('numbers:', numbers());
+    //   },
+    //   {
+    //     injector: this.injector,
+    //   }
+    // );
+
+    try {
+      const courses$ = from(this.coursesService.loadAllCourses())
+      .pipe(catchError((error) => {
+        console.log('An Error occurred (catch error): ', error);
+        return error;
+        
+      }));
+      const courses = toSignal(courses$, { injector: this.injector });
+      effect(
+        () => {
+          console.log('courses:', courses());
+        },
+        {
+          injector: this.injector,
+        }
+      );
+    } catch (error) {
+      console.log('An Error occurred (catch block): ', error);
+      
+    }
+
   }
 }
