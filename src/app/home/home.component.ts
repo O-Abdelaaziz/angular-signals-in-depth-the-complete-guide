@@ -16,7 +16,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { CoursesCardListComponent } from '../courses-card-list/courses-card-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MessagesService } from '../messages/messages.service';
-import { catchError, count, from, throwError } from 'rxjs';
+import { catchError, count, from, interval, startWith, throwError } from 'rxjs';
 import {
   toObservable,
   toSignal,
@@ -130,13 +130,29 @@ export class HomeComponent implements OnInit {
     // just this will be printed -
     // angular is going to wait for signal to stabilize in the end of change detection run and then only the lats value set it will be printed as the last value
     //  numbers.set(50);
+  }
 
-    const courses = toSignal(this.courses$, { injector: this.injector });
-
-    effect(() => {
-      console.log('courses:', courses());
-    },{
-      injector: this.injector
+  public onToSignal() {
+    // const courses = toSignal(this.courses$, { injector: this.injector });
+    // effect(() => {
+    //   console.log('courses:', courses());
+    // },{
+    //   injector: this.injector
+    // });
+    // const number$ = interval(1000).pipe(startWith(0)); if you add requireSync equals true in toSignal config
+    const number$ = interval(1000);
+    const numbers = toSignal(number$, {
+      injector: this.injector,
+      initialValue: 0,
     });
+
+    effect(
+      () => {
+        console.log('numbers:', numbers());
+      },
+      {
+        injector: this.injector,
+      }
+    );
   }
 }
