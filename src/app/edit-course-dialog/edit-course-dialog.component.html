@@ -15,7 +15,11 @@
     </textarea>
   </div>
 
-  <course-category-combobox label="Course category" [(value)]="category"></course-category-combobox>
+  <course-category-combobox label="Course category" [(value)]="category">
+    <div class="title" #title>
+      <h3>Course category (content projection)</h3>
+    </div>
+  </course-category-combobox>
 
   <div class="form-control">
     <label>Course image:</label>
