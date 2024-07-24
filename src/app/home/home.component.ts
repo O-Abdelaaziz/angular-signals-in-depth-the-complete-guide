@@ -52,13 +52,13 @@ export class HomeComponent implements OnInit {
     return courses.filter((course) => course.category == 'ADVANCED');
   });
 
-  courses$ = toObservable(this.#courses);
-
   private coursesService = inject(CoursesService);
   private messagesService = inject(MessagesService);
   private matDialog = inject(MatDialog);
 
   injector = inject(Injector);
+  // courses$ = toObservable(this.#courses);
+  courses$ = from(this.coursesService.loadAllCourses());
 
   constructor() {
     // effect(() => {
@@ -119,17 +119,24 @@ export class HomeComponent implements OnInit {
   public onToObservable() {
     // const courses$ = toObservable(this.#courses, { injector: this.injector });
     // courses$.subscribe((courses) => console.log(courses));
+    // const numbers=signal(0);
+    // numbers.set(10);
+    // numbers.set(20);
+    // numbers.set(30);
+    // const numbers$=toObservable(numbers,{injector:this.injector});
+    // numbers.set(40);
+    // numbers$.subscribe(console.log);
+    // numbers.set(40);
+    // just this will be printed -
+    // angular is going to wait for signal to stabilize in the end of change detection run and then only the lats value set it will be printed as the last value
+    //  numbers.set(50);
 
-    const numbers=signal(0);
-    numbers.set(10);
-    numbers.set(20);
-    numbers.set(30);
-    const numbers$=toObservable(numbers,{injector:this.injector});
-    numbers.set(40);
-    numbers$.subscribe(console.log);
-    numbers.set(40);
-     // just this will be printed - 
-     // angular is going to wait for signal to stabilize in the end of change detection run and then only the lats value set it will be printed as the last value
-     numbers.set(50);
+    const courses = toSignal(this.courses$, { injector: this.injector });
+
+    effect(() => {
+      console.log('courses:', courses());
+    },{
+      injector: this.injector
+    });
   }
 }
